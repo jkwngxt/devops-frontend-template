@@ -24,6 +24,8 @@ jobs:
           version: ${{ env.PNPM_VERSION }}
       - name: "Install dependencies"
         run: pnpm install
+      - name: "Install ESLint"
+        run: pnpm install --save-dev eslint eslint-config-next
       - name: "Setup ESLint config"
         run: |
           if [ ! -f .eslintrc.json ]; then
