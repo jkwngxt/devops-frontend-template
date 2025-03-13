@@ -1,0 +1,30 @@
+name: "Pull Request"
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+permissions:
+  contents: read
+env:
+  NODE_VERSION: 22
+  PNPM_VERSION: 9.1.1
+jobs:
+  lint-test:
+    name: "Lint and Test"
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v4"
+      - name: "Setup Node.js"
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: "Install pnpm"
+        uses: pnpm/action-setup@v3
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - name: "Install dependencies"
+        run: pnpm install
+      - name: "Run ESLint"
+        run: pnpm lint
+      - name: "Run Tests"
+        run: pnpm test
