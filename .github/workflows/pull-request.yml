@@ -24,6 +24,13 @@ jobs:
           version: ${{ env.PNPM_VERSION }}
       - name: "Install dependencies"
         run: pnpm install
+      - name: "Setup ESLint config"
+        run: |
+          if [ ! -f .eslintrc.json ]; then
+            echo '{
+              "extends": "next/core-web-vitals"
+            }' > .eslintrc.json
+          fi
       - name: "Run ESLint"
         run: pnpm lint
       - name: "Run Tests"
