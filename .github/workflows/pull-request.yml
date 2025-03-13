@@ -35,5 +35,17 @@ jobs:
           fi
       - name: "Run ESLint"
         run: pnpm lint
+      - name: "Check for test script"
+        id: check-test-script
+        run: |
+          if grep -q "\"test\":" package.json; then
+            echo "has_test=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_test=false" >> $GITHUB_OUTPUT
+          fi
       - name: "Run Tests"
+        if: steps.check-test-script.outputs.has_test == 'true'
         run: pnpm test
+      - name: "Skip Tests"
+        if: steps.check-test-script.outputs.has_test == 'false'
+        run: echo "No test script found in package.json. Skipping tests."
